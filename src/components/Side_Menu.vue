@@ -1,17 +1,21 @@
 <script>
+import { useRouter } from 'vue-router';
+
 export default {
   methods: {
     addNewStudent() {
-      this.$emit('show', 'add-student');
+      // this.$emit('show', 'add-student');
+      this.$router.push({ name: 'add-student' });
     },
     viewAllStudents() {
-      this.$emit('show', 'view-students');
+      // this.$emit('show', 'view-students');
+      this.$router.push({ name: 'view-students' });
     },
     addNewRequest() {
-      this.$emit('show', 'add-request');
+      this.$router.push({ name: 'add-request' });
     },
     viewAllRequests() {
-      this.$emit('show', 'view-requests');
+      this.$router.push({ name: 'view-requests' });
     },
     calendar() {
       // Your logic for showing the calendar

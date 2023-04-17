@@ -1,30 +1,9 @@
-
-
 <script>
-
-import sideMenu from './components/Side_Menu.vue'
-import AddStudent from './components/Add_Student.vue'
-import ViewStudent from './components/View_Students.vue'
-import AddRequest from './components/Add_Request.vue'
-import ViewRequest from './components/View_Requests.vue'
+import sideMenu from './components/Side_Menu.vue';
 
 export default {
   components: {
-    'side-menu':sideMenu,
-    'add-student':AddStudent,
-    'view-students':ViewStudent,
-    'add-request':AddRequest,
-    'view-requests':ViewRequest,
-  },
-  data() {
-    return {
-      currentView: 'add-student',
-    };
-  },
-  methods: {
-    changeView(view) {
-      this.currentView = view;
-    },
+    'side-menu': sideMenu,
   },
 };
 </script>
@@ -32,12 +11,11 @@ export default {
 <template>
   <div id="app">
     <div class="app-container">
-      <side-menu @show="changeView" />
-      <component :is="currentView" />
+      <side-menu />
+      <router-view></router-view>
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .app-container {

@@ -1,5 +1,10 @@
 <template>
     <div class="signup-container">
+
+      <div class="row">
+        <h1>Student</h1>
+      </div>
+
       <div class="row">
         <div class="input-container">
           <label for="first-name">First Name</label>
