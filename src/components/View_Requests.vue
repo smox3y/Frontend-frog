@@ -6,63 +6,108 @@
         <tr>
           <th>Request ID</th>
           <th>Requester Name</th>
-          <th>Email</th>
+          <th>Event Date</th>
           <th>Title</th>
           <th>Status</th>
+          <th>Assigned <br/>SuperFrog</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         <tr v-for="request in requests" :key="request.requestId">
           <td>{{ request.requestId }}</td>
           <td>{{ request.reqFirstName }} {{ request.reqLastName }}</td>
-          <td>{{ request.reqEmail }}</td>
+          <td>{{ request.eventDate }}</td>
           <td>{{ request.title }}</td>
           <td>{{ request.status }}</td>
+          <td>{{ request.assignedSuperFrog ? request.assignedSuperFrog : 'N/A' }}</td>
+          <td>
+            <button @click="editRequest(request)">Edit</button>
+          </td>
         </tr>
       </tbody>
     </table>
+    <edit-request
+    :show-modal="showEditModal"
+      :students="students"
+      :selected-request="requests[selectedRequestIndex]"
+      @close-modal="closeModal"
+      @data-updated="fetchRequests"
+    ></edit-request>
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import { ref, onMounted } from "vue";
+import EditRequest from "./Edit_Request.vue";
+import axios from "axios";
 
 export default {
+  components: {
+    EditRequest,
+  },
+  data() {
+    return {
+      requests: [],
+      showEditModal: false,
+      selectedRequestIndex: null,
+      students: [],
+    };
+  },
   setup() {
-    const requests = ref([])
+    const requests = ref([]);
 
     async function fetchRequests() {
       let config = {
-        method: 'get',
+        method: "get",
         maxBodyLength: Infinity,
-        url: 'http://localhost:8080/api/v1/appearances',
-        headers: { 
-          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoic3VwZXJmcm9nc2NoZWR1bGVyY2l0ZTMwMzYzQGdtYWlsLmNvbSIsImlkIjoxLCJleHAiOjE2ODIzODQxNDUsImlhdCI6MTY4MjM3Njk0NSwiYXV0aG9yaXRpZXMiOiJST0xFX1NQSVJJVERJUkVDVE9SIFJPTEVfU1VQRVJGUk9HIn0.Zq6QXKCfQKE9Saodkl8BntEy17GUUtI9WTzSZapTSJwJYX0Touy9XZ9fsOnxb6OIYQOWWkfQBDeLgyoBc6yu2UrilvWgblL0-nryMwIBqLFznNmydrFJRIEGp4Rgt0j3ua48tmHmPRX76Z0NedRDUNSLaS2mStyXF_TeCl_SEGLHZnsNBK7aH-vHt8dOnTxSQN_cZ7_WqUIr176Xu-3i_pBbD1MF7bnf8xCqsf7ugXIR_X14jYKtuUkgHl-N3oU8kwCoyW3BmV9AdCTlgSUgwavH6xxZxoMG6Cdqb6bernIHfn417GLlMRNjQOnjy_rSztnT4IYYjpZhXgnVSg9vCQ'
-        }
+        url: "http://localhost:8080/api/v1/appearances",
       };
 
-      axios.request(config)
-      .then((response) => {
+      try {
+        const response = await axios.request(config);
         console.log(JSON.stringify(response.data));
-        requests.value = response.data.data
-      })
-      .catch((error) => {
+        requests.value = response.data.data;
+      } catch (error) {
         console.log(error);
-      });
-
+      }
     }
 
-    onMounted(fetchRequests)
+    onMounted(fetchRequests);
 
     return {
-      print() {
-        console.log(students.value)
-      },
-      requests
-    }
-  }
-}
+      requests,
+      fetchRequests,
+    };
+  },
+  methods: {
+    async fetchStudents() {
+      let config = {
+        method: "get",
+        maxBodyLength: Infinity,
+        url: "http://localhost:8080/api/v1/users",
+      };
+
+      try {
+        const response = await axios.request(config);
+        console.log(JSON.stringify(response.data));
+        this.students = response.data.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    editRequest(request) {
+      this.selectedRequestIndex = this.requests.findIndex(
+        (req) => req.requestId === request.requestId
+      );
+      this.fetchStudents();
+      this.showEditModal = true;
+    },
+    closeModal() {
+      this.showEditModal = false;
+    },
+  },
+};
 </script>
 
 <style scoped>

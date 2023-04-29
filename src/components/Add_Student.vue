@@ -31,8 +31,24 @@
           <input type="text" id="physical-address" v-model="physicalAddress">
         </div>
         <div class="input-container">
-        <button type="submit" class="submit-button" @click="submitForm">Submit</button>
+          <label for="password">Password</label>
+          <input type="text" id="password" v-model="password">
+        </div>
       </div>
+
+      <div class="row">
+        <div class="input-container">
+          <label for="role">Role:</label>
+          <select name="role" id="role" v-model="role">
+            <option value="">Select Role</option>
+            <option value="SUPERFROG">SUPERFROG</option>
+            <option value="SUPERFROG SPIRITDIRECTOR">SUPERFROG SPIRITDIRECTOR</option>
+          </select>
+
+        </div>
+        <div class="input-container">
+          <button type="submit" class="submit-button" @click="submitForm">Submit</button>
+        </div>
       </div>
     </div>
   </template>
@@ -47,42 +63,49 @@
           phoneNumber: '',
           email: '',
           physicalAddress: '',
+          password: '',
+          role: ''
         };
       },
       methods: {
         async submitForm() {
-            const data = JSON.stringify({
-              // Update the data object with the appropriate form field values
-              email: this.email,
-              phoneNumber: this.phoneNumber,
-              firstName: this.firstName,
-              lastName: this.lastName,
-              address: this.physicalAddress,
-            });
+          let data = JSON.stringify({
+            "email": this.email,
+            "phoneNumber": this.phoneNumber,
+            "password": this.password,
+            "firstName": this.firstName,
+            "lastName": this.lastName,
+            "roles": this.role,
+            "active": true,
+            "international": false,
+            "address": this.physicalAddress,
+            "paymentPreference": "PICKUPCHECK"
+          });
 
-            const config = {
-              method: 'post',
-              maxBodyLength: Infinity,
-              url: 'http://localhost:8080/api/v1/users',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoic3VwZXJmcm9nc2NoZWR1bGVyY2l0ZTMwMzYzQGdtYWlsLmNvbSIsImlkIjoxLCJleHAiOjE2ODIzODQxNDUsImlhdCI6MTY4MjM3Njk0NSwiYXV0aG9yaXRpZXMiOiJST0xFX1NQSVJJVERJUkVDVE9SIFJPTEVfU1VQRVJGUk9HIn0.Zq6QXKCfQKE9Saodkl8BntEy17GUUtI9WTzSZapTSJwJYX0Touy9XZ9fsOnxb6OIYQOWWkfQBDeLgyoBc6yu2UrilvWgblL0-nryMwIBqLFznNmydrFJRIEGp4Rgt0j3ua48tmHmPRX76Z0NedRDUNSLaS2mStyXF_TeCl_SEGLHZnsNBK7aH-vHt8dOnTxSQN_cZ7_WqUIr176Xu-3i_pBbD1MF7bnf8xCqsf7ugXIR_X14jYKtuUkgHl-N3oU8kwCoyW3BmV9AdCTlgSUgwavH6xxZxoMG6Cdqb6bernIHfn417GLlMRNjQOnjy_rSztnT4IYYjpZhXgnVSg9vCQ',
-              },
-              data: data,
-            };
+          const config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'http://localhost:8080/api/v1/users',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            data: data,
+          };
 
-            try {
-              const response = await axios.request(config);
-              console.log(JSON.stringify(response.data));
-            } catch (error) {
-              console.log(error);
-            }
-          },
+          try {
+            const response = await axios.request(config);
+            console.log(JSON.stringify(response.data));
+          } catch (error) {
+            console.log(error);
+          }
+        },
+
+          
         },
       };
 </script>
   
-  <style scoped>
+  <style>
   .signup-container {
     display: flex;
     flex-direction: column;
