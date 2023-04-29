@@ -20,7 +20,7 @@
           <td>{{ request.eventDate }}</td>
           <td>{{ request.title }}</td>
           <td>{{ request.status }}</td>
-          <td>{{ request.assignedSuperFrog ? request.assignedSuperFrog : 'N/A' }}</td>
+          <td>{{ request.assignedName ? request.assignedName : 'N/A' }}</td>
           <td>
             <button @click="editRequest(request)">Edit</button>
           </td>
@@ -91,7 +91,7 @@ export default {
       try {
         const response = await axios.request(config);
         console.log(JSON.stringify(response.data));
-        this.students = response.data.data;
+        this.students = response.data.data.filter(student => student.active === true);;
       } catch (error) {
         console.log(error);
       }

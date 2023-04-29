@@ -28,6 +28,7 @@
         <option value="APPROVED">Approved</option>
         <option value="ASSIGNED">Assigned</option>
         <option value="COMPLETED">Completed</option>
+        <option value="REJECT">Reject</option>
       </select>
 
       <label for="students">Assign Student:</label>
@@ -66,6 +67,8 @@ export default {
 
 
     async function saveRequest() {
+      const apiCalls = [];
+
       if (
         JSON.stringify(props.selectedRequest) !==
         JSON.stringify(editedRequest.value)
@@ -80,33 +83,60 @@ export default {
           data: editedRequest.value,
         };
 
-        try {
-          const response = await axios.request(config);
-          console.log("Updated Data: " + JSON.stringify(response.data));
-          emit("data-updated");
-          closeModal();
-        } catch (error) {
-          console.log(error);
-        }
+        apiCalls.push(axios.request(config));
+        // try {
+        //   const response = await axios.request(config);
+        //   console.log("Updated Data: " + JSON.stringify(response.data));
+        //   emit("data-updated");
+        //   closeModal();
+        // } catch (error) {
+        //   console.log(error);
+        // }
       }
 
       if (selectedStudent.value) {
-        console.log("STUDNET IS SELECTED: ")
-        editedRequest.value.assignedName = selectedStudent.value.firstName + " " + selectedStudent.value.lastName;
-        console.log("ASSIGNED NAME: " + editedRequest.value.assignedName)
-        editedRequest.value.assignedId = selectedStudent.value.id;
-        console.log("ASSIGNED ID: " + editedRequest.value.assignedId)
+        apiCalls.push(assign(selectedStudent.value, editedRequest.value.requestId))
       }
 
       if(editedRequest.value.status === "APPROVED"){
-        approve(editedRequest.value.requestId)
+        apiCalls.push(approve(editedRequest.value.requestId))
       }else if(editedRequest.value.status === "COMPLETED"){
-        complete(editedRequest.value.requestId)
+        apiCalls.push(complete(editedRequest.value.requestId))
       }else if (editedRequest.value.status === "REJECT"){
-        reject(editedRequest.value.requestId)
+        apiCalls.push(reject(editedRequest.value.requestId))
       }
-      
-    
+
+      try {
+          const results = await Promise.all(apiCalls);
+          console.log("Updated Data: ", results);
+          emit("data-updated");
+          closeModal();
+      } catch (error) {
+        console.log(error);
+      }
+
+    }
+
+    function assign(stuInfo, reqId){
+
+      let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'http://localhost:8080/api/v1/users/assignments/' + stuInfo.id + '/' + reqId,
+        headers: { 
+          'Content-Type': 'application/json', 
+        },
+        data : stuInfo
+      };
+
+      return (axios.request(config))
+      .then((response) => {
+        console.log(JSON.stringify(response.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     }
 
     function approve(id){
@@ -116,7 +146,7 @@ export default {
         url: 'http://localhost:8080/api/v1/appearances/approval/' + id,
       };
 
-      axios.request(config)
+      return (axios.request(config))
       .then((response) => {
         console.log(JSON.stringify(response.data));
       })
@@ -129,10 +159,10 @@ export default {
       let config = {
         method: 'post',
         maxBodyLength: Infinity,
-        url: 'localhost:8080/api/v1/appearances/complete/' + id,
+        url: 'http://localhost:8080/api/v1/appearances/complete/' + id,
       }
 
-        axios.request(config)
+      return (axios.request(config))
         .then((response) => {
           console.log(JSON.stringify(response.data));
         })
@@ -148,7 +178,7 @@ export default {
         url: 'http://localhost:8080/api/v1/appearances/approval/' + id,
       };
 
-      axios.request(config)
+      return (axios.request(config))
       .then((response) => {
         console.log(JSON.stringify(response.data));
       })
