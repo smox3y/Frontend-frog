@@ -3,32 +3,34 @@ import AddStudent from './components/Add_Student.vue';
 import ViewStudents from './components/View_Students.vue';
 import AddRequest from './components/Add_Request.vue';
 import ViewRequests from './components/View_Requests.vue';
+import Login from './components/Login.vue';
 
 const routes = [
-    {
-        path: '/',
-        redirect: '/add-student',
-    },
-    {
-        path: '/add-student',
-        name: 'add-student',
-        component: AddStudent,
-    },
-    {
-        path: '/view-students',
-        name: 'view-students',
-        component: ViewStudents,
-    },
-    {
-    path: '/add-request',
-    name: 'add-request',
+  {
+    path: '/admin/add-student',
+    component: AddStudent,
+    meta: { requiresAuth: true, roles: ['SPIRITDIRECTOR'] },
+  },
+  {
+    path: '/admin/view-students',
+    component: ViewStudents,
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/admin/add-request',
     component: AddRequest,
-    },
-    {
-    path: '/view-requests',
-    name: 'view-requests',
+    meta: { requiresAuth: true, roles: ['SPIRITDIRECTOR'] },
+  },
+  {
+    path: '/admin/view-requests',
     component: ViewRequests,
-    },
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
 ];
 
 const router = createRouter({

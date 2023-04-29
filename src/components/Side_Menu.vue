@@ -1,21 +1,27 @@
 <script>
-import { useRouter } from 'vue-router';
 
 export default {
+  props: {
+    roles: {
+      type: String,
+      required: true,
+    },
+  },
+  mounted() {
+    console.log('Roles:', this.roles);
+  },
   methods: {
     addNewStudent() {
-      // this.$emit('show', 'add-student');
-      this.$router.push({ name: 'add-student' });
+      this.$router.push('/admin/add-student');
     },
     viewAllStudents() {
-      // this.$emit('show', 'view-students');
-      this.$router.push({ name: 'view-students' });
+      this.$router.push('/admin/view-students');
     },
     addNewRequest() {
-      this.$router.push({ name: 'add-request' });
+      this.$router.push('/admin/add-request');
     },
     viewAllRequests() {
-      this.$router.push({ name: 'view-requests' });
+      this.$router.push('/admin/view-requests');
     },
     calendar() {
       // Your logic for showing the calendar
@@ -23,7 +29,17 @@ export default {
     reports() {
       // Your logic for generating reports
     },
+    logout() {
+      localStorage.removeItem('token');
+      this.$router.push('/login');
+      this.$emit('logout'); // Emit the 'logout' event
+    }
   },
+  computed : {
+    isAdmin() {
+      return this.roles.includes('SPIRITDIRECTOR');
+    }
+  }
 };
 </script>
 
@@ -33,13 +49,15 @@ export default {
       <img src="../assets/logo.png" alt="Logo" class="logo" />
     </div>
     <ul class="nav-list">
-      <li><a href="#" @click.prevent="addNewStudent">Add a New Student</a></li>
+      <li v-if="roles.includes('SPIRITDIRECTOR')"><a href="#" @click.prevent="addNewStudent" >Add a New Student</a></li>
       <li><a href="#" @click.prevent="viewAllStudents">View All Students</a></li>
-      <li><a href="#" @click.prevent="addNewRequest">Add a New Request</a></li>
+      <li v-if="roles.includes('SPIRITDIRECTOR')"><a href="#" @click.prevent="addNewRequest">Add a New Request</a></li>
       <li><a href="#" @click.prevent="viewAllRequests">View All Requests</a></li>
       <li><a href="#" @click.prevent="calendar">Calendar</a></li>
       <li><a href="#" @click.prevent="reports">Reports</a></li>
+      <li><a href="#" @click.prevent="logout">Logout</a></li>
     </ul>
+
   </div>
 </template>
 
@@ -49,7 +67,7 @@ export default {
   flex-direction: column;
   width: 30%; /* Increase the width to 25% or another value that works for your design */
   min-width: 200px; /* Set a minimum width to ensure the navbar remains usable on smaller screens */
-  height: 100%;
+  height: 100vh;
   background-color: #4d1979;
   padding: 1rem;
   font-family: Arial, sans-serif;
@@ -82,5 +100,27 @@ export default {
 
 .nav-list a:hover {
   text-decoration: underline;
+}
+
+.logout-container {
+  position: absolute;
+  bottom: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+button {
+  background-color: #4d1979;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #6f42c1;
 }
 </style>

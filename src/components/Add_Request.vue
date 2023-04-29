@@ -30,8 +30,18 @@
       </div>
       <div class="row">
         <div class="input-container">
-          <label for="physical-address">Physical Address</label>
-          <input type="text" id="physical-address" v-model="physicalAddress">
+          <label for="Event Name">Event Title</label>
+          <input type="text" id="EventName" v-model="EventTitle">
+        </div>
+        <div class="input-container">
+          <label for="Address">Address</label>
+          <input type="text" id="Address" v-model="Address">
+        </div>
+      </div>
+      <div class="row">
+        <div class="input-container">
+          <label for="EventDate">Event Date</label>
+          <input type="text" id="EventDate" v-model="EventDate">
         </div>
         <div class="input-container">
             <button type="submit" class="submit-button" @click="submitRequest">Submit</button>
@@ -42,46 +52,63 @@
   
   <script>
   import axios from 'axios'
-  export default {
-    data() {
-      return {
-        firstName: '',
-        lastName: '',
-        phoneNumber: '',
-        email: '',
-        physicalAddress: '',
-      };
-    },
-    methods: {
-    async submitRequest() {
-      const data = JSON.stringify({
-        // Update the data object with the appropriate form field values
-        email: this.email,
-        phoneNumber: this.phoneNumber,
-        firstName: this.firstName,
-        lastName: this.lastName,
-        address: this.physicalAddress,
-      });
+    export default {
+      data() {
+        return {
+          firstName: '',
+          lastName: '',
+          phoneNumber: '',
+          email: '',
+          EventTitle: '',
+          Address: '',
+          EventDate: '',
+        };
+      },
+      methods: {
+      async submitRequest() {
+        let data = JSON.stringify({
+          "reqFirstName": "test",
+          "reqLastName": "B",
+          "reqPhoneNumber": "1234567890",
+          "reqEmail": "asda@gmail.com",
+          "appearanceType": "PRIVATE",
+          "title": "Wedding",
+          "orgName": "none",
+          "address": "6612 trail bluff dr plano tx 75024",
+          "mileage": 2.5,
+          "eventDate": "2023-12-25",
+          "startTime": "17:23:00",
+          "endTime": "19:23:00",
+          "status": "PENDING",
+          "desc": "party",
+          "onCampus": false,
+          "instructions": "none",
+          "expenses": "none",
+          "outsideOrg": "none",
+          "assignedName":null,
+          "assignedId":null
+        });
 
-      const config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'http://localhost:8080/api/v1/appearances', // Update the API URL for requests
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJzZWxmIiwic3ViIjoic3VwZXJmcm9nc2NoZWR1bGVyY2l0ZTMwMzYzQGdtYWlsLmNvbSIsImlkIjoxLCJleHAiOjE2ODIzODQxNDUsImlhdCI6MTY4MjM3Njk0NSwiYXV0aG9yaXRpZXMiOiJST0xFX1NQSVJJVERJUkVDVE9SIFJPTEVfU1VQRVJGUk9HIn0.Zq6QXKCfQKE9Saodkl8BntEy17GUUtI9WTzSZapTSJwJYX0Touy9XZ9fsOnxb6OIYQOWWkfQBDeLgyoBc6yu2UrilvWgblL0-nryMwIBqLFznNmydrFJRIEGp4Rgt0j3ua48tmHmPRX76Z0NedRDUNSLaS2mStyXF_TeCl_SEGLHZnsNBK7aH-vHt8dOnTxSQN_cZ7_WqUIr176Xu-3i_pBbD1MF7bnf8xCqsf7ugXIR_X14jYKtuUkgHl-N3oU8kwCoyW3BmV9AdCTlgSUgwavH6xxZxoMG6Cdqb6bernIHfn417GLlMRNjQOnjy_rSztnT4IYYjpZhXgnVSg9vCQ', // Replace with the appropriate access token
-        },
-        data: data,
-      };
+        let config = {
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: 'http://localhost:8080/api/v1/appearances',
+          headers: { 
+            'Content-Type': 'application/json', 
+          },
+          data : data
+        };
 
-      try {
-        const response = await axios.request(config);
-        console.log(JSON.stringify(response.data));
-      } catch (error) {
-        console.log(error);
-      }
+        axios.request(config)
+        .then((response) => {
+          console.log(JSON.stringify(response.data));
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+      },
     },
-  },
 };
   </script>
   
