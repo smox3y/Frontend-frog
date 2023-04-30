@@ -4,6 +4,7 @@ import ViewStudents from './components/View_Students.vue';
 import AddRequest from './components/Add_Request.vue';
 import ViewRequests from './components/View_Requests.vue';
 import Login from './components/Login.vue';
+import EditStudent from './components/Edit_Student.vue';
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     path: '/login',
     name: 'login',
     component: Login,
+  },
+  {
+    path: '/admin/Edit_Student',
+    component: EditStudent,
+    meta: { requiresAuth: true },
+
   },
 ];
 
