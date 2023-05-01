@@ -87,8 +87,7 @@
             console.log(JSON.stringify(response.data));
             this.studentData = response.data;
             console.log(this.studentData); 
-         
-
+            
     } catch (error) {
             console.log(error);
           }
