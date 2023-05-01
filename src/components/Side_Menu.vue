@@ -23,6 +23,9 @@ export default {
     viewAllRequests() {
       this.$router.push('/admin/view-requests');
     },
+    EditStudent() {
+      this.$router.push('/admin/Edit_Student');
+    },
     calendar() {
       // Your logic for showing the calendar
     },
@@ -55,6 +58,7 @@ export default {
       <li><a href="#" @click.prevent="viewAllRequests">View All Requests</a></li>
       <li><a href="#" @click.prevent="calendar">Calendar</a></li>
       <li><a href="#" @click.prevent="reports">Reports</a></li>
+      <li><a href="#" @click.prevent="EditStudent">Edit Student</a></li>
       <li><a href="#" @click.prevent="logout">Logout</a></li>
     </ul>
 

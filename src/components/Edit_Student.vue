@@ -6,6 +6,19 @@
       </div>
 
       <div class="row">
+       <div class="input-container">
+          <label for="studentID">Student ID</label>
+          <input type="text" id="studentID" v-model="studentID">
+
+          <div class="input-container">
+          <button type="checkID" class="checkID" @click="checkID">Check Your ID</button>
+        </div>
+        </div>
+
+        </div>
+
+              <div class="row">
+
         <div class="input-container">
           <label for="first-name">First Name</label>
           <input type="text" id="first-name" v-model="firstName">
@@ -68,6 +81,37 @@
         };
       },
       methods: {
+        async checkID() {
+          try {
+            const response = await axios.get(`http://localhost:8080/api/v1/users/${this.studentID}`);
+            console.log(JSON.stringify(response.data));
+            this.studentData = response.data;
+            console.log(this.studentData); 
+         
+
+    } catch (error) {
+            console.log(error);
+          }
+        },
+
+        async updateStudentData() {
+      try {
+        console.log("hello")
+        const response = await axios.put(`http://localhost:8080/api/v1/students/${this.studentData.id}`, {
+          "firstName": this.studentData.firstName,
+          "lastName": this.studentData.lastName,
+          "phoneNumber": this.studentData.phoneNumber,
+          "email": this.studentData.email,
+          "physicalAddress": this.studentData.physicalAddress,
+          "password": this.studentData.password,
+          "roles": this.studentData.role,
+        });
+        console.log(JSON.stringify(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
         async submitForm() {
           let data = JSON.stringify({
             "email": this.email,
