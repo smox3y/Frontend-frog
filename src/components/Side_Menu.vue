@@ -26,6 +26,9 @@ export default {
     EditStudent() {
       this.$router.push('/admin/Edit_Student');
     },
+     studentRequests() {
+      this.$router.push('/admin/student_requests');
+    },
     calendar() {
       // Your logic for showing the calendar
     },
@@ -59,6 +62,7 @@ export default {
       <li><a href="#" @click.prevent="calendar">Calendar</a></li>
       <li><a href="#" @click.prevent="reports">Reports</a></li>
       <li><a href="#" @click.prevent="EditStudent">Edit Student</a></li>
+      <li><a href="#" @click.prevent="studentRequests">Student Requests</a></li>
       <li><a href="#" @click.prevent="logout">Logout</a></li>
     </ul>
 
@@ -70,7 +74,7 @@ export default {
   display: flex;
   flex-direction: column;
   width: 30%; /* Increase the width to 25% or another value that works for your design */
-  min-width: 200px; /* Set a minimum width to ensure the navbar remains usable on smaller screens */
+  min-width: 300px; /* Set a minimum width to ensure the navbar remains usable on smaller screens */
   height: 100vh;
   background-color: #4d1979;
   padding: 1rem;
